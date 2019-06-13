@@ -24,12 +24,12 @@ def search_address
   puts ""
 
   # 検索ワードを2文字ずつに分割
-  # それぞれでインデックスファイルを検索し、該当する行番号の和集合に該当するレコードを取得する
+  # それぞれでインデックスファイルを検索し、該当する行番号の積集合に該当するレコードを取得する
   search_bigram = search_word.each_char.each_cons(2).map{|chars| chars.join}
 
-  # 分割後の検索ワードカウント用変数
+  # 分割後の検索ワード個数カウント用変数
   bigram_num = 0
-  # マッチする行番号を格納する変数
+  # 検索ワードにマッチするソースファイルの行番号を格納する二次元配列
   match_list = Array.new(search_bigram.length).map{Array.new()}
 
   # インデックスファイルから検索ワードを含むソースファイルの行番号を取得
@@ -48,23 +48,20 @@ def search_address
     total_list = total_list & list
   end
 
-
   result = []
   # 行番号をもとにソースファイルから結果取得
-  open("clear_source.csv") {|file|
+  File.open("clear_source.csv", "r") do |file|
     all_record = file.readlines
     if total_list
       total_list.each do |line_num|
         result << all_record[line_num.to_i - 1]
       end
     end
-  }
+  end
 
   puts "<<検索結果>>"
   result.each do |list|
     puts list
   end
-
   puts "・・・検索結果は#{total_list.length}件です"
-
 end

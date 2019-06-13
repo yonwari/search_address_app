@@ -1,7 +1,6 @@
 require "csv"
 require "nkf"
 
-
 def make_index
   # ソースファイルを整える
   File.open("clear_source.csv", "w") do |file|
@@ -30,13 +29,12 @@ def make_index
   end
 
   # ワード順、登場行順でソート
-  tmp_file = tmp_file.sort_by {|x| [x[0], x[1]]}
+  tmp_file = tmp_file.sort_by {|record| [record[0], record[1]]}
 
   # 一時格納したデータをファイルに書き込み
-  File.open("index_file.csv","w") do |f|
+  File.open("index_file.csv","w") do |file|
     tmp_file.each do |line|
-      f.puts line.join(",")
+      file.puts line.join(",")
     end
   end
-
 end
